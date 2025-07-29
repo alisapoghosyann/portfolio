@@ -108,7 +108,7 @@ const Contact = () => {
     {
       icon: <Github size={24} />,
       name: 'GitHub',
-      url: 'https://github.com',
+      url: 'https://github.com/alisapoghosyann?tab=repositories',
       color: 'hover:text-gray-800 dark:hover:text-gray-200'
     },
     {

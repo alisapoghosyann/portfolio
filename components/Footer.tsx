@@ -7,7 +7,7 @@ import { Github, Linkedin, Mail, Heart, Code, Coffee } from 'lucide-react'
 
 const Footer = () => {
   const socialLinks = [
-    { icon: <Github size={20} />, url: 'https://github.com', label: 'GitHub' },
+    { icon: <Github size={20} />, url: 'https://github.com/alisapoghosyann?tab=repositories', label: 'GitHub' },
     { icon: <Linkedin size={20} />, url: 'https://www.linkedin.com/in/alisa-poghosyan-015780225', label: 'LinkedIn' },
     { icon: <Mail size={20} />, url: 'mailto:alisapoghosyan858@gmail.com', label: 'Email' }
   ]

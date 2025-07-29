@@ -93,7 +93,7 @@ const Projects = () => {
                     {project.featured && (
                       <Badge
                         value="Featured"
-                        className="absolute top-4 left-4 bg-secondary-500 text-white"
+                        className="absolute top-4 left-4 bg-secondary-500 text-white px-3"
                       />
                     )}
                   </div>
@@ -171,7 +171,7 @@ const Projects = () => {
                 label="View GitHub"
                 icon={<Github size={18} />}
                 className="bg-white text-primary-600 hover:bg-gray-100 border-0 mt-4 px-3 py-1"
-                onClick={() => window.open('https://github.com', '_blank')}
+                onClick={() => window.open('https://github.com/alisapoghosyann?tab=repositories', '_blank')}
               />
             </div>
           </Card>

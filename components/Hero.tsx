@@ -15,11 +15,12 @@ const Hero = () => {
   }
 
   const downloadCV = () => {
-    // In a real app, this would download the actual CV
-    const link = document.createElement('a')
-    link.href = '#'
-    link.download = 'Alisa_Poghosyan_CV.pdf'
-    link.click()
+    const link = document.createElement('a');
+    link.href = '/Alisa_Poghosyan_CV.pdf';
+    link.setAttribute('download', 'Alisa_Poghosyan_CV.pdf');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   return (
