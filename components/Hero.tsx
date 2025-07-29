@@ -22,7 +22,23 @@ const Hero = () => {
     link.click();
     document.body.removeChild(link);
   }
-
+  const socialLinks = [
+    {
+      icon: <Github size={24} />,
+      name: 'GitHub',
+      url: 'https://github.com/alisapoghosyann?tab=repositories',
+    },
+    {
+      icon: <Linkedin size={24} />,
+      name: 'LinkedIn',
+      url: 'https://www.linkedin.com/in/alisa-poghosyan-015780225',
+    },
+    {
+      icon: <Mail size={24} />,
+      name: 'Email',
+      url: 'mailto:alisapoghosyan858@gmail.com',
+    }
+  ]
   return (
     <section id="home" className="min-h-screen flex items-center justify-center pt-16 px-4">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -113,21 +129,15 @@ const Hero = () => {
             transition={{ delay: 0.7, duration: 0.6 }}
             className="flex items-center space-x-6 pt-4"
           >
-            <Button
-              icon={<Github size={24} />}
-              className="p-button-rounded p-button-text hover:bg-gray-100 dark:hover:bg-gray-800"
-              aria-label="GitHub"
-            />
-            <Button
-              icon={<Linkedin size={24} />}
-              className="p-button-rounded p-button-text hover:bg-gray-100 dark:hover:bg-gray-800"
-              aria-label="LinkedIn"
-            />
-            <Button
-              icon={<Mail size={24} />}
-              className="p-button-rounded p-button-text hover:bg-gray-100 dark:hover:bg-gray-800"
-              aria-label="Email"
-            />
+            {socialLinks.map((link) => (
+              <Button
+                key={link.name}
+                icon={link.icon}
+                className="p-button-rounded p-button-text hover:bg-gray-100 dark:hover:bg-gray-800"
+                aria-label={link.name}
+                onClick={() => window.open(link.url, '_blank')}
+              />
+            ))}
           </motion.div>
         </motion.div>
 
