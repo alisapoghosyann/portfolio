@@ -101,8 +101,20 @@ const About = () => {
                   </h3>
                 </div>
               </div>
-              
+
               <div className="space-y-4">
+                <div className="border-l-4 border-primary-500 pl-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                      National Polytechnic University of Armenia
+                    </h4>
+                    <Badge value="Bachelor's" className="bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 px-3 h-8 flex items-center justify-center" />
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Bachelor of Applied Science (BASc)
+                  </p>
+                </div>
+
                 <div className="border-l-4 border-primary-500 pl-6">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
@@ -111,7 +123,7 @@ const About = () => {
                     <Badge value="2020-2021" className="bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 px-3 h-8 flex items-center justify-center" />
                   </div>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Learned HTML, CSS, JavaScript, and React through a course and self-study.
+                    Frontend Development
                   </p>
                 </div>
               </div>
