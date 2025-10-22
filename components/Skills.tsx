@@ -19,48 +19,48 @@ import {
 import { useEffect, useState } from 'react'
 import { client, Skill, SkillCategory } from '@/lib/sanity'
 
+const categoryIcons: { [key: string]: JSX.Element } = {
+  frontend: <Code2 size={24} />,
+  state: <Database size={24} />,
+  ui: <Palette size={24} />,
+  data: <BarChart3 size={24} />,
+  forms: <FileText size={24} />,
+  tools: <GitBranch size={24} />,
+  management: <Settings size={24} />,
+  backend: <Layers size={24} />,
+  cms: <Database size={24} />,
+  testing: <Zap size={24} />
+}
+
+const categoryColors: { [key: string]: string } = {
+  frontend: 'from-blue-500 to-cyan-500',
+  state: 'from-green-500 to-emerald-500',
+  ui: 'from-purple-500 to-pink-500',
+  data: 'from-orange-500 to-red-500',
+  forms: 'from-indigo-500 to-purple-500',
+  tools: 'from-gray-500 to-gray-700',
+  management: 'from-teal-500 to-cyan-500',
+  backend: 'from-yellow-500 to-orange-500',
+  cms: 'from-pink-500 to-rose-500',
+  testing: 'from-emerald-500 to-teal-500'
+}
+
+const categoryTitles: { [key: string]: string } = {
+  frontend: 'Frontend Development',
+  state: 'State Management',
+  ui: 'UI/UX Libraries',
+  data: 'Data Visualization',
+  forms: 'Form Management',
+  tools: 'Version Control & Tools',
+  management: 'Project Management',
+  backend: 'Backend & APIs',
+  cms: 'CMS Platforms',
+  testing: 'Testing Frameworks'
+}
+
 const Skills = () => {
   const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([])
   const [loading, setLoading] = useState(true)
-
-  const categoryIcons: { [key: string]: JSX.Element } = {
-    frontend: <Code2 size={24} />,
-    state: <Database size={24} />,
-    ui: <Palette size={24} />,
-    data: <BarChart3 size={24} />,
-    forms: <FileText size={24} />,
-    tools: <GitBranch size={24} />,
-    management: <Settings size={24} />,
-    backend: <Layers size={24} />,
-    cms: <Database size={24} />,
-    testing: <Zap size={24} />
-  }
-
-  const categoryColors: { [key: string]: string } = {
-    frontend: 'from-blue-500 to-cyan-500',
-    state: 'from-green-500 to-emerald-500',
-    ui: 'from-purple-500 to-pink-500',
-    data: 'from-orange-500 to-red-500',
-    forms: 'from-indigo-500 to-purple-500',
-    tools: 'from-gray-500 to-gray-700',
-    management: 'from-teal-500 to-cyan-500',
-    backend: 'from-yellow-500 to-orange-500',
-    cms: 'from-pink-500 to-rose-500',
-    testing: 'from-emerald-500 to-teal-500'
-  }
-
-  const categoryTitles: { [key: string]: string } = {
-    frontend: 'Frontend Development',
-    state: 'State Management',
-    ui: 'UI/UX Libraries',
-    data: 'Data Visualization',
-    forms: 'Form Management',
-    tools: 'Version Control & Tools',
-    management: 'Project Management',
-    backend: 'Backend & APIs',
-    cms: 'CMS Platforms',
-    testing: 'Testing Frameworks'
-  }
 
   useEffect(() => {
     const fetchSkills = async () => {

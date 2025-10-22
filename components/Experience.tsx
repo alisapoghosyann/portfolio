@@ -6,7 +6,7 @@ import { Badge } from 'primereact/badge'
 import { Timeline } from 'primereact/timeline'
 import { Briefcase, Calendar, MapPin, CheckCircle } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { client, Experience } from '@/lib/sanity'
+import { client, type Experience } from '@/lib/sanity'
 
 const Experience = () => {
   const [experiences, setExperiences] = useState<Experience[]>([])
