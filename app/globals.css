@@ -51,6 +51,49 @@ body {
   @apply bg-primary-600;
 }
 
+/* Toast styling */
+.p-toast .p-toast-message {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+  border: none !important;
+  margin: 10px !important;
+}
+
+.p-toast .p-toast-message-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: white !important;
+}
+
+.p-toast .p-toast-message-error {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  color: white !important;
+}
+
+.p-toast .p-toast-message .p-toast-message-content {
+  padding: 1rem 1.5rem !important;
+}
+
+.p-toast .p-toast-message .p-toast-summary {
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.p-toast .p-toast-message .p-toast-detail {
+  font-size: 0.9rem !important;
+  opacity: 0.95 !important;
+  line-height: 1.4 !important;
+}
+
+.p-toast .p-toast-message .p-toast-icon-close {
+  color: white !important;
+  opacity: 0.8 !important;
+}
+
+.p-toast .p-toast-message .p-toast-icon-close:hover {
+  opacity: 1 !important;
+}
+
 /* Smooth transitions */
 * {
   transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
@@ -124,4 +167,61 @@ body {
 
 .dark .card-hover:hover {
   box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+}
+
+/* Mobile responsiveness fixes */
+@media (max-width: 640px) {
+  /* Prevent horizontal scrolling */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Better text wrapping */
+  .p-badge {
+    word-break: break-word;
+    white-space: normal;
+  }
+  
+  /* Fix form inputs on mobile */
+  .p-inputtext, .p-inputtextarea {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
+  
+  /* Better button sizing on mobile */
+  .p-button {
+    min-height: 44px !important; /* iOS touch target size */
+  }
+}
+
+/* Extra small screens (320px) */
+@media (max-width: 375px) {
+  /* Ensure proper spacing on very small screens */
+  .container, .max-w-7xl {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+  
+  /* Smaller text sizes for very small screens */
+  .text-lg {
+    font-size: 1rem !important;
+  }
+  
+  .text-xl {
+    font-size: 1.125rem !important;
+  }
+  
+  .text-2xl {
+    font-size: 1.25rem !important;
+  }
+  
+  /* Better card padding on very small screens */
+  .p-card .p-card-body {
+    padding: 0.75rem !important;
+  }
+  
+  /* Ensure badges don't overflow */
+  .p-badge {
+    font-size: 0.625rem !important;
+    padding: 0.25rem 0.5rem !important;
+  }
 }

@@ -55,11 +55,11 @@ const Navigation = () => {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-16 sm:h-20">
             {/* Logo */}
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="text-2xl font-bold gradient-text cursor-pointer"
+              className="text-lg sm:text-2xl font-bold gradient-text cursor-pointer"
               onClick={() => scrollToSection('#home')}
             >
               Alisa Poghosyan
@@ -88,17 +88,17 @@ const Navigation = () => {
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="md:hidden flex items-center space-x-2">
+            <div className="md:hidden flex items-center space-x-1">
               <Button
-                icon={theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+                icon={theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="p-button-rounded p-button-text"
+                className="p-button-rounded p-button-text p-button-sm"
                 aria-label="Toggle theme"
               />
               <Button
-                icon={<Menu size={24} />}
+                icon={<Menu size={20} />}
                 onClick={() => setSidebarVisible(true)}
-                className="p-button-rounded p-button-text"
+                className="p-button-rounded p-button-text p-button-sm"
                 aria-label="Open menu"
               />
             </div>
@@ -111,14 +111,14 @@ const Navigation = () => {
         visible={sidebarVisible}
         position="right"
         onHide={() => setSidebarVisible(false)}
-        className="w-80"
+        className="w-72"
         header={
-          <div className="flex justify-between items-center w-full">
-            <span className="text-xl font-bold gradient-text">Menu</span>
+          <div className="flex justify-between items-center w-full px-4">
+            <span className="text-lg font-bold gradient-text">Menu</span>
           </div>
         }
       >
-        <div className="flex flex-col space-y-4 pt-8">
+        <div className="flex flex-col space-y-2 pt-4 px-4">
           {navItems.map((item, index) => (
             <motion.button
               key={item.label}
@@ -126,7 +126,7 @@ const Navigation = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 }}
               onClick={() => scrollToSection(item.href)}
-              className="text-left text-lg text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="text-left text-base text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 py-3 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               {item.label}
             </motion.button>

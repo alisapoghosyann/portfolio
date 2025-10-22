@@ -1,13 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Card } from 'primereact/card'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
 import { Toast } from 'primereact/toast'
-import { useRef } from 'react'
 import {
   Mail,
   Phone,
@@ -17,7 +16,9 @@ import {
   Linkedin,
   MessageCircle,
   Clock,
-  CheckCircle
+  CheckCircle,
+  Loader2,
+  AlertCircle
 } from 'lucide-react'
 import emailjs from 'emailjs-com'
 
@@ -49,17 +50,30 @@ const Contact = () => {
         {
           from_name: formData.name,
           from_email: formData.email,
-          subject: formData.subject,
-          message: formData.message
+          to_name: 'Alisa Poghosyan',
+          to_email: 'alisapoghosyan858@gmail.com',
+          subject: `Portfolio Contact: ${formData.subject}`,
+          message: `
+From: ${formData.name}
+Email: ${formData.email}
+Subject: ${formData.subject}
+
+Message:
+${formData.message}
+
+---
+This message was sent from your portfolio contact form.
+          `,
+          reply_to: formData.email
         },
         'gV0hmMwWmqm2FKzpA'
       )
 
       toast.current?.show({
         severity: 'success',
-        summary: 'Message Sent!',
-        detail: 'Thank you for your message. I&apos;ll get back to you soon!',
-        life: 5000
+        summary: 'Message Sent Successfully!',
+        detail: `Thank you ${formData.name}! I'll get back to you at ${formData.email} within 24 hours.`,
+        life: 6000
       })
 
       setFormData({ name: '', email: '', subject: '', message: '' })
@@ -67,9 +81,9 @@ const Contact = () => {
       console.error('Email error:', error)
       toast.current?.show({
         severity: 'error',
-        summary: 'Error',
-        detail: 'Something went wrong. Please try again later.',
-        life: 5000
+        summary: 'Failed to Send Message',
+        detail: 'Something went wrong. Please try again or contact me directly at alisapoghosyan858@gmail.com',
+        life: 8000
       })
     } finally {
       setLoading(false)
@@ -128,7 +142,10 @@ const Contact = () => {
   return (
     <section id="contact" className="py-20 px-4">
       <div className="max-w-7xl mx-auto">
-        <Toast ref={toast} />
+        <Toast 
+          ref={toast} 
+          position="top-right"
+        />
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -240,7 +257,7 @@ const Contact = () => {
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6 p-2">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -251,7 +268,8 @@ const Contact = () => {
                       onChange={(e) => handleInputChange('name', e.target.value)}
                       placeholder="Your name"
                       required
-                      className="w-full px-4 py-2"
+                      disabled={loading}
+                      className="w-full p-3"
                     />
                   </div>
                   <div className="space-y-2">
@@ -264,7 +282,8 @@ const Contact = () => {
                       onChange={(e) => handleInputChange('email', e.target.value)}
                       placeholder="your.email@example.com"
                       required
-                      className="w-full px-4 py-2"
+                      disabled={loading}
+                      className="w-full p-3"
                     />
                   </div>
                 </div>
@@ -276,9 +295,10 @@ const Contact = () => {
                   <InputText
                     value={formData.subject}
                     onChange={(e) => handleInputChange('subject', e.target.value)}
-                    placeholder="What&apos;s this about?"
+                    placeholder="What's this about?"
                     required
-                    className="w-full px-4 py-2"
+                    disabled={loading}
+                    className="w-full p-3"
                   />
                 </div>
 
@@ -292,15 +312,18 @@ const Contact = () => {
                     placeholder="Tell me about your project..."
                     rows={6}
                     required
-                    className="w-full px-4 py-2"
+                    disabled={loading}
+                    className="w-full p-3"
                   />
                 </div>
 
                 <Button
                   type="submit"
-                  label={loading ? "Sending..." : "Send Message"}
+                  disabled={loading}
                   loading={loading}
-                  className="w-full bg-primary-600 border-primary-600 hover:bg-primary-700 text-white py-3 font-semibold"
+                  label={loading ? "Sending Message..." : "Send Message"}
+                  icon={loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                  className="w-full bg-primary-600 border-primary-600 hover:bg-primary-700 text-white py-4 px-6 font-semibold text-lg"
                 />
               </form>
             </Card>

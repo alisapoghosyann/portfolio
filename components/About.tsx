@@ -5,19 +5,82 @@ import { Card } from 'primereact/card'
 import { ProgressBar } from 'primereact/progressbar'
 import { Badge } from 'primereact/badge'
 import { User, MapPin, Phone, Mail, Globe, Calendar } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { client, PersonalInfo, Education } from '@/lib/sanity'
 
 const About = () => {
-  const languages = [
-    { name: 'English', level: 'Upper Intermediate', progress: 85 },
-    { name: 'Russian', level: 'Pre Intermediate', progress: 60 },
-    { name: 'Armenian', level: 'Native', progress: 100 },
-  ]
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null)
+  const [education, setEducation] = useState<Education[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const personalInfo = [
-    { icon: <Phone size={18} />, label: 'Phone', value: '(+374)-77-96-92-26' },
-    { icon: <Mail size={18} />, label: 'Email', value: 'alisapoghosyan858@gmail.com' },
-    { icon: <MapPin size={18} />, label: 'Location', value: 'Armenia' },
-    { icon: <Calendar size={18} />, label: 'Experience', value: '4+ Years' },
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [personalInfoData, educationData] = await Promise.all([
+          client.fetch('*[_type == "personalInfo"][0]'),
+          client.fetch('*[_type == "education"] | order(order asc)')
+        ])
+        
+        setPersonalInfo(personalInfoData)
+        setEducation(educationData)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+        // Fallback to static data
+        setPersonalInfo({
+          name: 'Alisa Poghosyan',
+          title: 'Senior Frontend Developer',
+          email: 'alisapoghosyan858@gmail.com',
+          phone: '(+374)-77-96-92-26',
+          location: 'Armenia',
+          summary: 'Experienced Frontend Developer with 4+ years of expertise in React.js, Next.js, TypeScript, and modern web technologies.',
+          experience: '4+ Years',
+          languages: [
+            { name: 'English', level: 'Upper Intermediate', progress: 85 },
+            { name: 'Russian', level: 'Pre Intermediate', progress: 60 },
+            { name: 'Armenian', level: 'Native', progress: 100 }
+          ],
+          softSkills: ['Teamwork', 'Time Management', 'Responsibility', 'Discipline', 'Confidence', 'Resilience']
+        })
+        setEducation([
+          {
+            institution: 'National Polytechnic University of Armenia',
+            degree: 'Bachelor of Applied Science (BASc)',
+            period: '2018-2022',
+            description: 'Comprehensive study of computer science fundamentals, software engineering principles, and modern development practices.'
+          },
+          {
+            institution: 'Smart Code',
+            degree: 'Frontend Development Certification',
+            period: '2020-2021',
+            description: 'Intensive program covering modern frontend technologies, responsive design, and best practices in web development.'
+          }
+        ])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  if (loading) {
+    return (
+      <section id="about" className="py-20 px-4">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading...</p>
+        </div>
+      </section>
+    )
+  }
+
+  if (!personalInfo) return null
+
+  const personalInfoItems = [
+    { icon: <Phone size={18} />, label: 'Phone', value: personalInfo.phone },
+    { icon: <Mail size={18} />, label: 'Email', value: personalInfo.email },
+    { icon: <MapPin size={18} />, label: 'Location', value: personalInfo.location },
+    { icon: <Calendar size={18} />, label: 'Experience', value: personalInfo.experience },
   ]
 
   return (
@@ -57,21 +120,17 @@ const About = () => {
                     Profile
                   </h3>
                   <p className="text-primary-600 dark:text-primary-400">
-                    Frontend Developer
+                    {personalInfo.title}
                   </p>
                 </div>
               </div>
               
               <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
-                I am a skilled frontend developer with over 4 years of experience in building 
-                and maintaining responsive web applications. I thrive in collaborative environments 
-                and am dedicated to delivering high-quality, efficient solutions. My goal is to 
-                secure a position where I can continue to grow my skills and contribute to 
-                innovative projects.
+                {personalInfo.summary}
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {personalInfo.map((item, index) => (
+                {personalInfoItems.map((item, index) => (
                   <div key={index} className="flex items-center space-x-3">
                     <div className="text-primary-500">
                       {item.icon}
@@ -103,29 +162,24 @@ const About = () => {
               </div>
 
               <div className="space-y-4">
-                <div className="border-l-4 border-primary-500 pl-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                      National Polytechnic University of Armenia
-                    </h4>
-                    <Badge value="Bachelor's" className="bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 px-3 h-8 flex items-center justify-center" />
+                {education.map((edu, index) => (
+                  <div key={index} className="border-l-4 border-primary-500 pl-6">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                        {edu.institution}
+                      </h4>
+                      <Badge value={edu.period} className="bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 px-3 h-8 flex items-center justify-center" />
+                    </div>
+                    <p className="text-gray-600 dark:text-gray-400">
+                      {edu.degree}
+                    </p>
+                    {edu.description && (
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        {edu.description}
+                      </p>
+                    )}
                   </div>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Bachelor of Applied Science (BASc)
-                  </p>
-                </div>
-
-                <div className="border-l-4 border-primary-500 pl-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                      Smart Code
-                    </h4>
-                    <Badge value="2020-2021" className="bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 px-3 h-8 flex items-center justify-center" />
-                  </div>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Frontend Development
-                  </p>
-                </div>
+                ))}
               </div>
             </Card>
           </motion.div>
@@ -153,7 +207,7 @@ const About = () => {
               </div>
 
               <div className="space-y-8">
-                {languages.map((lang, index) => (
+                {personalInfo.languages.map((lang, index) => (
                   <motion.div
                     key={lang.name}
                     initial={{ opacity: 0, y: 20 }}
@@ -187,11 +241,11 @@ const About = () => {
                   Soft Skills
                 </h4>
                 <div className="flex flex-wrap gap-3">
-                  {['Teamwork', 'Time Management', 'Responsibility', 'Discipline', 'Confidence', 'Resilience'].map((skill) => (
+                  {personalInfo.softSkills.map((skill) => (
                     <Badge 
                       key={skill}
                       value={skill} 
-                      className="bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 px-3 h-8 flex items-center justify-center px-3 py-2"
+                      className="bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 px-3 py-2 h-8 flex items-center justify-center"
                     />
                   ))}
                 </div>
@@ -199,6 +253,7 @@ const About = () => {
             </Card>
           </motion.div>
         </div>
+
       </div>
     </section>
   )
