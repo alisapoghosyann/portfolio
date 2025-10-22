@@ -119,6 +119,9 @@ const Footer = () => {
                 TypeScript
               </span>
               <span className="bg-gray-800 px-3 py-1 rounded-full text-gray-300">
+                Sanity
+              </span>
+              <span className="bg-gray-800 px-3 py-1 rounded-full text-gray-300">
                 Tailwind CSS
               </span>
               <span className="bg-gray-800 px-3 py-1 rounded-full text-gray-300">
@@ -148,7 +151,7 @@ const Footer = () => {
           
           <div className="flex items-center space-x-2">
             <Coffee size={16} />
-            <span>© 2024 All rights reserved</span>
+            <span>© 2025 All rights reserved</span>
           </div>
         </motion.div>
       </div>

@@ -16,94 +16,131 @@ import {
   Layers,
   Zap
 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { client, Skill, SkillCategory } from '@/lib/sanity'
 
 const Skills = () => {
-  const skillCategories = [
-    {
-      title: 'Frontend Development',
-      icon: <Code2 size={24} />,
-      color: 'from-blue-500 to-cyan-500',
-      skills: [
-        { name: 'HTML/CSS', level: 95, description: 'Advanced markup and styling' },
-        { name: 'JavaScript', level: 90, description: 'ES6+, Modern JS features' },
-        { name: 'React.js', level: 95, description: 'Component-based architecture' },
-        { name: 'Next.js', level: 88, description: 'Full-stack React framework' },
-        { name: 'TypeScript', level: 85, description: 'Type-safe development' },
-        { name: 'Sass/SCSS', level: 80, description: 'CSS preprocessing' }
-      ]
-    },
-    {
-      title: 'State Management',
-      icon: <Database size={24} />,
-      color: 'from-green-500 to-emerald-500',
-      skills: [
-        { name: 'Redux', level: 85, description: 'Predictable state container' },
-        { name: 'Zustand', level: 80, description: 'Lightweight state management' },
-        { name: 'React Query', level: 78, description: 'Server state management' }
-      ]
-    },
-    {
-      title: 'UI/UX Libraries',
-      icon: <Palette size={24} />,
-      color: 'from-purple-500 to-pink-500',
-      skills: [
-        { name: 'Tailwind CSS', level: 92, description: 'Utility-first CSS framework' },
-        { name: 'Material UI', level: 85, description: 'React component library' },
-        { name: 'Chakra UI', level: 80, description: 'Modular component library' },
-        { name: 'Bootstrap', level: 88, description: 'CSS framework' },
-        { name: 'PrimeReact', level: 85, description: 'Rich set of UI components' }
-      ]
-    },
-    {
-      title: 'Data Visualization',
-      icon: <BarChart3 size={24} />,
-      color: 'from-orange-500 to-red-500',
-      skills: [
-        { name: 'Recharts', level: 82, description: 'Composable charting library' },
-        { name: 'Chart.js', level: 80, description: 'Canvas-based charts' }
-      ]
-    },
-    {
-      title: 'Form Management',
-      icon: <FileText size={24} />,
-      color: 'from-indigo-500 to-purple-500',
-      skills: [
-        { name: 'Formik', level: 85, description: 'Build forms without tears' },
-        { name: 'React Hook Form', level: 88, description: 'Performant, flexible forms' }
-      ]
-    },
-    {
-      title: 'Version Control & Tools',
-      icon: <GitBranch size={24} />,
-      color: 'from-gray-500 to-gray-700',
-      skills: [
-        { name: 'Git', level: 90, description: 'Version control system' },
-        { name: 'GitHub', level: 88, description: 'Code hosting platform' },
-        { name: 'GitLab', level: 85, description: 'DevOps platform' },
-        { name: 'Bitbucket', level: 80, description: 'Git repository management' }
-      ]
-    },
-    {
-      title: 'Project Management',
-      icon: <Settings size={24} />,
-      color: 'from-teal-500 to-cyan-500',
-      skills: [
-        { name: 'Trello', level: 85, description: 'Visual project management' },
-        { name: 'Jira', level: 82, description: 'Agile project management' },
-        { name: 'ClickUp', level: 80, description: 'All-in-one workspace' }
-      ]
-    },
-    {
-      title: 'Backend & APIs',
-      icon: <Layers size={24} />,
-      color: 'from-yellow-500 to-orange-500',
-      skills: [
-        { name: 'PHP', level: 70, description: 'Server-side scripting' },
-        { name: 'Laravel', level: 68, description: 'PHP web framework' },
-        { name: 'GetStream', level: 75, description: 'Chat and activity feeds' }
-      ]
+  const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([])
+  const [loading, setLoading] = useState(true)
+
+  const categoryIcons: { [key: string]: JSX.Element } = {
+    frontend: <Code2 size={24} />,
+    state: <Database size={24} />,
+    ui: <Palette size={24} />,
+    data: <BarChart3 size={24} />,
+    forms: <FileText size={24} />,
+    tools: <GitBranch size={24} />,
+    management: <Settings size={24} />,
+    backend: <Layers size={24} />,
+    cms: <Database size={24} />,
+    testing: <Zap size={24} />
+  }
+
+  const categoryColors: { [key: string]: string } = {
+    frontend: 'from-blue-500 to-cyan-500',
+    state: 'from-green-500 to-emerald-500',
+    ui: 'from-purple-500 to-pink-500',
+    data: 'from-orange-500 to-red-500',
+    forms: 'from-indigo-500 to-purple-500',
+    tools: 'from-gray-500 to-gray-700',
+    management: 'from-teal-500 to-cyan-500',
+    backend: 'from-yellow-500 to-orange-500',
+    cms: 'from-pink-500 to-rose-500',
+    testing: 'from-emerald-500 to-teal-500'
+  }
+
+  const categoryTitles: { [key: string]: string } = {
+    frontend: 'Frontend Development',
+    state: 'State Management',
+    ui: 'UI/UX Libraries',
+    data: 'Data Visualization',
+    forms: 'Form Management',
+    tools: 'Version Control & Tools',
+    management: 'Project Management',
+    backend: 'Backend & APIs',
+    cms: 'CMS Platforms',
+    testing: 'Testing Frameworks'
+  }
+
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        const skillsData = await client.fetch('*[_type == "skill"] | order(order asc)')
+        
+        // Group skills by category
+        const groupedSkills: { [key: string]: Skill[] } = {}
+        skillsData.forEach((skill: Skill) => {
+          if (!groupedSkills[skill.category]) {
+            groupedSkills[skill.category] = []
+          }
+          groupedSkills[skill.category].push(skill)
+        })
+
+        // Create skill categories
+        const categories: SkillCategory[] = Object.entries(groupedSkills).map(([category, skills]) => ({
+          title: categoryTitles[category] || category,
+          skills,
+          icon: categoryIcons[category] || <Code2 size={24} />,
+          color: categoryColors[category] || 'from-blue-500 to-cyan-500'
+        }))
+
+        setSkillCategories(categories)
+      } catch (error) {
+        console.error('Error fetching skills:', error)
+        // Fallback to static data
+        setSkillCategories([
+          {
+            title: 'Frontend Development',
+            icon: <Code2 size={24} />,
+            color: 'from-blue-500 to-cyan-500',
+            skills: [
+              { name: 'HTML/CSS', level: 95, description: 'Advanced markup and styling', category: 'frontend' },
+              { name: 'JavaScript', level: 90, description: 'ES6+, Modern JS features', category: 'frontend' },
+              { name: 'React.js', level: 95, description: 'Component-based architecture', category: 'frontend' },
+              { name: 'Next.js', level: 88, description: 'Full-stack React framework', category: 'frontend' },
+              { name: 'TypeScript', level: 85, description: 'Type-safe development', category: 'frontend' },
+              { name: 'Sass/SCSS', level: 80, description: 'CSS preprocessing', category: 'frontend' }
+            ]
+          },
+          {
+            title: 'CMS Platforms',
+            icon: <Database size={24} />,
+            color: 'from-pink-500 to-rose-500',
+            skills: [
+              { name: 'Sanity', level: 85, description: 'Headless CMS platform', category: 'cms' },
+              { name: 'WordPress', level: 80, description: 'Content management system', category: 'cms' },
+              { name: 'Directus', level: 75, description: 'Open-source headless CMS', category: 'cms' },
+              { name: 'Shopify', level: 88, description: 'E-commerce platform', category: 'cms' }
+            ]
+          },
+          {
+            title: 'Testing Frameworks',
+            icon: <Zap size={24} />,
+            color: 'from-emerald-500 to-teal-500',
+            skills: [
+              { name: 'Jest', level: 85, description: 'JavaScript testing framework', category: 'testing' },
+              { name: 'Cypress', level: 82, description: 'End-to-end testing framework', category: 'testing' }
+            ]
+          }
+        ])
+      } finally {
+        setLoading(false)
+      }
     }
-  ]
+
+    fetchSkills()
+  }, [])
+
+  if (loading) {
+    return (
+      <section id="skills" className="py-20 px-4">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading skills...</p>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section id="skills" className="py-20 px-4">

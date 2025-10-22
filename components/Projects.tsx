@@ -5,50 +5,78 @@ import { Card } from 'primereact/card'
 import { Button } from 'primereact/button'
 import { Badge } from 'primereact/badge'
 import { ExternalLink, Github, Eye, Code } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { client, Project } from '@/lib/sanity'
+import { urlFor } from '@/lib/sanity'
 
 const Projects = () => {
-  const projects = [
-    {
-      id: 1,
-      title: 'Lawrence Harvey',
-      description: 'A modern recruitment website created from scratch using React and Next.js. Features responsive design, smooth animations, and optimized performance.',
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop',
-      technologies: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
-      liveUrl: 'https://lawrence-harvey.vercel.app/',
-      githubUrl: '#',
-      featured: true
-    },
-    {
-      id: 2,
-      title: 'Kahunas.io',
-      description: 'Comprehensive chat application with GetStream integration for coaches to contact clients. Features include audio/video recording, file attachments, emoji reactions, and more.',
-      image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop',
-      technologies: ['React', 'GetStream', 'WebRTC', 'Socket.io', 'Node.js'],
-      liveUrl: 'https://kahunas.io/',
-      githubUrl: '#',
-      featured: true
-    },
-    {
-      id: 3,
-      title: 'Website Dapp',
-      description: 'Web3 application with MultiversX integration. Features QR code connectivity from mobile app, blockchain transactions, and decentralized functionality.',
-      image: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=600&fit=crop',
-      technologies: ['React', 'Web3', 'MultiversX', 'TypeScript', 'Ethers.js'],
-      liveUrl: 'https://website-dapp.vercel.app/',
-      githubUrl: '#',
-      featured: false
-    },
-    {
-      id: 4,
-      title: 'Nettyworth',
-      description: 'Advanced Web3 project built from scratch featuring portfolio tracking, DeFi analytics, and comprehensive dashboard for cryptocurrency investments.',
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop',
-      technologies: ['React', 'Next.js', 'Web3', 'Chart.js', 'TailwindCSS'],
-      liveUrl: 'https://nettyworth.io/',
-      githubUrl: '#',
-      featured: false
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const projectsData = await client.fetch('*[_type == "project"] | order(order asc)')
+        setProjects(projectsData)
+      } catch (error) {
+        console.error('Error fetching projects:', error)
+        // Fallback to static data
+        setProjects([
+          {
+            title: 'Lawrence Harvey',
+            description: 'A modern recruitment website created from scratch using React and Next.js. Features responsive design, smooth animations, and optimized performance.',
+            technologies: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+            liveUrl: 'https://lawrence-harvey.vercel.app/',
+            githubUrl: 'https://github.com/alisapoghosyann/lawrence-harvey',
+            featured: true,
+            category: 'web'
+          },
+          {
+            title: 'Kahunas.io',
+            description: 'Comprehensive chat application with GetStream integration for coaches to contact clients. Features include audio/video recording, file attachments, emoji reactions, and more.',
+            technologies: ['React', 'GetStream', 'WebRTC', 'Socket.io', 'Node.js'],
+            liveUrl: 'https://kahunas.io/',
+            githubUrl: 'https://github.com/alisapoghosyann/kahunas',
+            featured: true,
+            category: 'web'
+          },
+          {
+            title: 'Website Dapp',
+            description: 'Web3 application with MultiversX integration. Features QR code connectivity from mobile app, blockchain transactions, and decentralized functionality.',
+            technologies: ['React', 'Web3', 'MultiversX', 'TypeScript', 'Ethers.js'],
+            liveUrl: 'https://website-dapp.vercel.app/',
+            githubUrl: 'https://github.com/alisapoghosyann/website-dapp',
+            featured: false,
+            category: 'web3'
+          },
+          {
+            title: 'Nettyworth',
+            description: 'Advanced Web3 project built from scratch featuring portfolio tracking, DeFi analytics, and comprehensive dashboard for cryptocurrency investments.',
+            technologies: ['React', 'Next.js', 'Web3', 'Chart.js', 'TailwindCSS'],
+            liveUrl: 'https://nettyworth.io/',
+            githubUrl: 'https://github.com/alisapoghosyann/nettyworth',
+            featured: false,
+            category: 'web3'
+          }
+        ])
+      } finally {
+        setLoading(false)
+      }
     }
-  ]
+
+    fetchProjects()
+  }, [])
+
+  if (loading) {
+    return (
+      <section id="projects" className="py-20 px-4 bg-gray-50 dark:bg-gray-900/50">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading projects...</p>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section id="projects" className="py-20 px-4 bg-gray-50 dark:bg-gray-900/50">
@@ -71,7 +99,7 @@ const Projects = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {projects.map((project, index) => (
             <motion.div
-              key={project.id}
+              key={project.title}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.2 }}
@@ -99,10 +127,10 @@ const Projects = () => {
                   </div>
 
                   {/* Project Content */}
-                  <div className={`p-6 flex flex-col justify-between ${project.featured ? 'lg:w-1/2' : ''}`}>
+                  <div className={`p-4 sm:p-6 flex flex-col justify-between ${project.featured ? 'lg:w-1/2' : ''}`}>
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+                        <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-200">
                           {project.title}
                         </h3>
                         <div className="flex items-center space-x-2">
@@ -112,12 +140,14 @@ const Projects = () => {
                             aria-label="View project"
                             onClick={() => window.open(project.liveUrl, '_blank')}
                           />
-                          <Button
-                            icon={<Github size={16} />}
-                            className="p-button-rounded p-button-text p-button-sm"
-                            aria-label="View code"
-                            onClick={() => window.open(project.githubUrl, '_blank')}
-                          />
+                          {project.githubUrl && (
+                            <Button
+                              icon={<Github size={16} />}
+                              className="p-button-rounded p-button-text p-button-sm"
+                              aria-label="View code"
+                              onClick={() => window.open(project.githubUrl, '_blank')}
+                            />
+                          )}
                         </div>
                       </div>
 
@@ -125,12 +155,12 @@ const Projects = () => {
                         {project.description}
                       </p>
 
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1 sm:gap-2">
                         {project.technologies.map((tech) => (
                           <Badge
                             key={tech}
                             value={tech}
-                            className="bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 px-3 h-8 flex items-center justify-center"
+                            className="bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200 px-2 sm:px-3 h-6 sm:h-8 flex items-center justify-center text-xs sm:text-sm"
                           />
                         ))}
                       </div>
