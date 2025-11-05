@@ -68,7 +68,7 @@ export interface Skill {
 export interface SkillCategory {
   title: string
   skills: Skill[]
-  icon: string
+  icon: JSX.Element
   color: string
 }
 

@@ -29,19 +29,11 @@ const personalInfoData = {
 const educationData = [
   {
     _type: 'education',
-    institution: 'National Polytechnic University of Armenia',
-    degree: 'Bachelor of Applied Science (BASc)',
-    period: '2018-2022',
-    description: 'Comprehensive study of computer science fundamentals, software engineering principles, and modern development practices.',
-    order: 0
-  },
-  {
-    _type: 'education',
     institution: 'Smart Code',
     degree: 'Frontend Development Certification',
     period: '2020-2021',
     description: 'Intensive program covering modern frontend technologies, responsive design, and best practices in web development.',
-    order: 1
+    order: 0
   }
 ]
 

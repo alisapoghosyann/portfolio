@@ -109,10 +109,6 @@ Nettyworth - DeFi Portfolio Tracker
 
 EDUCATION
 
-National Polytechnic University of Armenia
-Bachelor of Applied Science (BASc) | 2018-2022
-Comprehensive study of computer science fundamentals, software engineering principles, and modern development practices.
-
 Smart Code
 Frontend Development Certification | 2020-2021
 Intensive program covering modern frontend technologies, responsive design, and best practices in web development.
@@ -486,11 +482,6 @@ const htmlContent = `
 
     <div class="section">
         <div class="section-title">Education</div>
-        <div class="education-item">
-            <div class="institution">National Polytechnic University of Armenia</div>
-            <div class="degree">Bachelor of Applied Science (BASc) | 2018-2022</div>
-            <div class="tech-list">Comprehensive study of computer science fundamentals, software engineering principles, and modern development practices.</div>
-        </div>
         <div class="education-item">
             <div class="institution">Smart Code</div>
             <div class="degree">Frontend Development Certification | 2020-2021</div>
