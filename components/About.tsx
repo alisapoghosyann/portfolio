@@ -43,12 +43,6 @@ const About = () => {
         })
         setEducation([
           {
-            institution: 'National Polytechnic University of Armenia',
-            degree: 'Bachelor of Applied Science (BASc)',
-            period: '2018-2022',
-            description: 'Comprehensive study of computer science fundamentals, software engineering principles, and modern development practices.'
-          },
-          {
             institution: 'Smart Code',
             degree: 'Frontend Development Certification',
             period: '2020-2021',
